@@ -2,13 +2,27 @@
 
 set -euo pipefail
 
+##? Setups the environment
+#?? 1.0.0
+##?
+##? Usage:
+##?    install
+echo
+echo "---------------------------------------------------------"
 echo "🚀 Welcome to the sandersgutierrez/dotfiles installer!"
 echo "---------------------------------------------------------"
-echo 
-export DOTFILES_PATH="$HOME/.dotfiles"
-echo "👉  Cloning into: '$DOTFILES_PATH'"
+echo
 
 # To test that git is installed (if not macOS will prompt an installer)
-git --version
+git_version=$(git --version | awk '{print $3}')
+echo "👉  Git Version: $git_version"
 
-git clone --depth 1 git@github.com/sandersgutierrez/dotfiles.git "$DOTFILES_PATH"
+export DOTFILES_PATH="$HOME/.dotfiles"
+if ! [[ -d $DOTFILES_PATH ]]; then 
+    git clone --depth 1 git@github.com:sandersgutierrez/dotfiles.git "$DOTFILES_PATH"
+    echo
+    echo "👉  Cloning into: '$DOTFILES_PATH'"
+fi
+
+
+
