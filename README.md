@@ -9,7 +9,7 @@
 Execute the [`installer`](installer.sh) from your terminal.
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/untalsanders/dotfiles/main/installer | bash
+curl -fsSL https://raw.githubusercontent.com/untalsanders/dotfiles/main/installer.sh | bash
 ```
 
 ## :police_officer:️ License
