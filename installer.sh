@@ -16,21 +16,26 @@ echo "🚀 Welcome to the untalsanders/dotfiles installer!"
 echo "---------------------------------------------------------"
 echo
 
-dotfiles_default_install_dir() {
-    [ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.dotfiles" || printf %s "${XDG_CONFIG_HOME}/dotfiles"
+# DOTFILES_DIR
+# The directory where the dotfiles will be installed.
+DOTFILES_DIR="${DOTFILES_DIR-}"
+
+# Default install directory
+dotfiles_get_dir() {
+    [ -z "${DOTFILES_DIR}" ] && printf %s"\n" "${HOME}/.dotfiles"
 }
 
-dotfiles_install_dir() {
+dotfiles_set_install_dir() {
     if [ -n "${DOTFILES_DIR}" ]; then
-        printf %s "${DOTFILES_DIR}"
+        printf %s"\n" "${DOTFILES_DIR}"
     else
-        dotfiles_default_install_dir
+        printf %s"\n" "$(dotfiles_get_dir)"
     fi
 }
 
 dotfiles_do_install() {
     local INSTALL_DIR
-    INSTALL_DIR="$(dotfiles_install_dir)"
+    INSTALL_DIR="$(dotfiles_set_install_dir)"
 
     echo "📂 Dotfiles will be installed in: ${INSTALL_DIR}"
 
@@ -48,16 +53,12 @@ dotfiles_do_install() {
     echo
     echo "👉 Installing git..."
     command git init --bare "${INSTALL_DIR}"
-    
-    # Making aliases
+
+    # Adds alias to .zshrc or .bashrc
     if [ -f "${HOME}/.zshrc" ]; then
         echo "👉 Adding alias to .zshrc..."
+        echo -e "\n# Dotfiles alias" >> "${HOME}/.zshrc"
         echo "alias dotfiles='git --git-dir=\"${INSTALL_DIR}\" --work-tree=\"${HOME}\"'" >> "${HOME}/.zshrc"
-    fi
-    
-    if [ -f "${HOME}/.bashrc" ]; then
-        echo "👉 Adding alias to .bashrc..."
-        echo "alias dotfiles='git --git-dir=\"${INSTALL_DIR}\" --work-tree=\"${HOME}\"'" >> "${HOME}/.bashrc"
     fi
 }
 
